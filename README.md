@@ -1,4 +1,4 @@
-# Onur Matik Agent Skills
+# Agent Skills
 
 Public, installable agent skills for Onur Matik projects.
 
