@@ -1,0 +1,61 @@
+name: Validate skills
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Validate skill structure
+        run: python3 scripts/validate_skills.py
+      - name: Test a clean local installation
+        shell: bash
+        run: |
+          test_home="$(mktemp -d)"
+          trap 'rm -rf "$test_home"' EXIT
+          HOME="$test_home" npx -y skills@latest add "$PWD" \
+            -g -a codex -s gezgin -y --copy
+          installed="$(find "$test_home" -type f -path '*/skills/gezgin/SKILL.md' -print -quit)"
+          test -n "$installed"
+          skill_root="$(dirname "$installed")"
+          test -f "$skill_root/agents/openai.yaml"
+          test -f "$skill_root/references/destination-research.md"
+          test -f "$skill_root/references/profile-and-community.md"
+          test -f "$skill_root/references/events.md"
+
+  anonymous-install:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    needs: validate
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Install from public GitHub without credentials
+        shell: bash
+        env:
+          GH_TOKEN: ""
+          GITHUB_TOKEN: ""
+        run: |
+          test_home="$(mktemp -d)"
+          trap 'rm -rf "$test_home"' EXIT
+          HOME="$test_home" npx -y skills@latest add onurmatik/skills \
+            -g -a codex -s gezgin -y --copy
+          installed="$(find "$test_home" -type f -path '*/skills/gezgin/SKILL.md' -print -quit)"
+          test -n "$installed"
+          skill_root="$(dirname "$installed")"
+          test -f "$skill_root/agents/openai.yaml"
+          test -f "$skill_root/references/destination-research.md"
+          test -f "$skill_root/references/profile-and-community.md"
+          test -f "$skill_root/references/events.md"

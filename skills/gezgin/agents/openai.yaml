@@ -1,0 +1,15 @@
+interface:
+  display_name: "Gezgin"
+  short_description: "Travel research and community workflows"
+  default_prompt: "Use $gezgin to compare destinations and coordinate a Gezgin meetup."
+
+dependencies:
+  tools:
+    - type: "mcp"
+      value: "gezgin"
+      description: "Source-backed Gezgin travel and community tools"
+      transport: "streamable_http"
+      url: "https://gezgin.com/mcp"
+
+policy:
+  allow_implicit_invocation: true
