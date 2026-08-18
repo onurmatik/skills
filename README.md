@@ -1,6 +1,6 @@
 # Agent Skills
 
-Public, installable agent skills for Onur Matik projects.
+Public, installable agent skills for my (@onurmatik) projects.
 
 Each published skill lives under `skills/<name>/` and includes its complete
 instruction package: `SKILL.md` plus any required `agents`, `references`,
