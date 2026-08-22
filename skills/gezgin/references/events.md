@@ -12,11 +12,11 @@ Use these workflows for reusable activities and concrete social plans. Discovery
 
 ## Start from “I want to do something this weekend”
 
-1. Call `explore` and present the strongest returned Events, EventInstances, places, people, and refs-free generated ideas.
+1. Call `explore` and present the strongest returned Events, EventInstances, places, people, and refs-free generated ideas. Preserve each returned `next_actions` entry with its indexed activity, trigger, confirmation requirement, and schedule requirement.
 2. Ask only useful non-blocking clarification topics after giving best-effort suggestions.
 3. If the user selects an existing EventInstance, call `set_event_participation` for their explicit interest, join, or leave choice.
 4. If the user selects an Event but wants another concrete time or meeting place, call `create_event_instance`; creation also joins the actor.
-5. If the user selects or expresses enthusiasm for a refs-free generated idea, offer to create it as a reusable Event before asking for schedule details. Explain that materializing it makes the activity easier for other interested people to discover. The selection itself is not write approval.
+5. If the user selects or expresses enthusiasm for a refs-free generated idea and its `next_actions` entry offers `create_event`, offer to create it as a reusable Event before asking for schedule details. Explain the returned `make_activity_discoverable` reason as making the activity easier for other interested people to discover. The selection itself is not write approval.
 6. After the user explicitly asks to create or keep the reusable idea, call `create_event` even when no date, time, or meeting point is known. Stop before instance creation unless the user also wants a concrete meetup.
 7. Missing schedule details block only `create_event_instance`; they never block `create_event`. After the user wants a concrete meetup, require an exact start time with timezone and an effective meeting point: either the selected Event's returned default or a name/address the user supplies. Ask for whichever fact is missing and never invent it.
 8. If the selected concrete plan has no canonical Event yet, call `create_event` after explicit approval, then call `create_event_instance`. Carry a user-supplied meeting name/address into the instance override when the new Event result has no resolved default meeting place. Creation joins the actor and makes the occurrence public according to the returned visibility.
