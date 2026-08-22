@@ -27,11 +27,13 @@ Do not infer that a person has a private life circumstance. Present only the per
 5. If the city is already present, omit its update and preserve the existing relationship. If it is absent, ask which relationship applies before writing. Do not infer `currently_here`, `live`, `planning`, `curious`, or `past`.
 6. Confirm the exact city and interest profile signals written and the explicitly selected cohort pair, then present the deterministic community URL. The pair remains a derived community view, not a separately stored group membership.
 
+If the user says they want others in a selected community to find them, offer this profile workflow and wait for confirmation. Explain that it makes the city-and-interest pair explicit for eligible privacy-safe discovery; it does not create a cohort, bypass profile visibility, guarantee a match, or publish the raw request.
+
 A city, interest, household detail, or life circumstance mentioned in natural language personalizes only the current discovery. It is not permission to update the profile. Never use private matching context to infer or describe another person. If any named tool is absent from the live catalog, stop that workflow rather than inventing an alternate name.
 
 ## Remember activity or location intent
 
-1. Call `set_interest` only when the user asks Gezgin to remember or remove flexible intent tied to a canonical Event or location.
+1. Call `set_interest` only when the user asks Gezgin to remember or remove flexible intent tied to a canonical Event or location. Never describe this actor-owned record as a public post.
 2. Include every explicitly known preference and availability detail rather than reducing the interest to a boolean.
 3. A phrase such as “this weekend any time works” belongs here, not in a timeless EventInstance.
 4. Use saved context in later exploration when authorized. Do not treat a destination or preference mentioned for the current answer as stored data.

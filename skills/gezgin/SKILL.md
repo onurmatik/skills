@@ -23,12 +23,20 @@ Use the tools supplied by the declared Gezgin MCP dependency to complete the use
 
 - Route every side-effect-free “what should I do?”, “who should I meet?”, “where should I go?”, public event, activity, place, and destination-data request through `explore`. Send the current message as the request and only short, explicit, relevant prior facts as conversation context; never reconstruct the full chat.
 - Treat `suggested.people`, `suggested.places`, `suggested.activities`, and `suggested.communities` as one ranked response surface. Each community is a deterministic city plus one canonical interest view, not a saved group or membership. Use `context` for source, freshness, assumption, and uncertainty disclosure. Clarification is optional: give the best available suggestions first, then ask about the returned topics only when useful.
-- If `status` is `degraded`, clearly say detailed results are temporarily unavailable, present only the returned fallback ideas, and offer to retry. Never turn a refs-free idea into a claim about a live person, place, or event.
+- If `status` is `degraded`, clearly say detailed results are temporarily unavailable and present only the returned fallback ideas. Offer to retry, then offer only relevant actor-owned follow-ups from the section below. Never turn a refs-free idea into a claim about a live person, place, or event.
 - Move to a profile, interest, follow, participation, Event, or EventInstance write only after the user explicitly chooses that outcome. Apply a selected community view through `update_profile`; preserve returned canonical refs and revisions.
 - Read [destination research](references/destination-research.md) for source-backed location discovery and comparisons.
 - Read [profile and community](references/profile-and-community.md) for profile context, presence, saved interests, member discovery, derived city communities, and follows.
 - Read [event workflows](references/events.md) for Event/EventInstance semantics, flexible intent, scheduling, participation, and comments.
 - Read every relevant reference when a request crosses domains, then compose one coherent workflow instead of repeating the same read.
+
+## Continue after no suitable match
+
+- An empty or degraded discovery never authorizes a write. When no suitable person, Event, or EventInstance is returned, briefly offer the relevant next action and wait for the user's explicit choice.
+- Offer `set_interest` when the user wants Gezgin to remember flexible intent. Describe it as actor-owned saved intent, not a public post and not a promise that another member will find it.
+- Offer the selected city-and-interest community view through `update_profile` when the user explicitly wants that pair represented in their profile for eligible privacy-safe member discovery. Explain that this is a derived view, not direct cohort or group creation, and do not promise visibility or matches.
+- When no suitable Event or EventInstance exists, ask in the user's language whether they want to create one. If they agree to a concrete meetup, require an exact start time with timezone and a concrete meeting point returned by the selected Event or supplied by the user. Ask for either missing fact; never invent it. Then call `create_event` if a canonical Event is still needed and `create_event_instance` to schedule and join the public occurrence.
+- Before the first connected follow-up, call `get_account_capabilities`. A degraded read does not itself block a separately approved write, but every write must still use current canonical refs, the live tool catalog, and its own successful response.
 
 ## Clarify and present
 

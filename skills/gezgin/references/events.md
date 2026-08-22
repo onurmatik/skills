@@ -15,8 +15,11 @@ Use these workflows for reusable activities and concrete social plans. Discovery
 2. Ask only useful non-blocking clarification topics after giving best-effort suggestions.
 3. If the user selects an existing EventInstance, call `set_event_participation` for their explicit interest, join, or leave choice.
 4. If the user selects an Event but wants another concrete time or meeting place, call `create_event_instance`; creation also joins the actor.
-5. If the user selects a refs-free generated idea and explicitly wants to keep it, call `create_event`, then optionally `create_event_instance` when a concrete start time exists.
-6. If intent remains flexible, call `set_interest` only when the user asks Gezgin to remember it. Include known location, activity group, child-friendly/accessibility needs, environment, intensity, and availability.
+5. If no suitable Event or EventInstance is returned, ask whether the user wants to create one. Do not create anything from the discovery request alone.
+6. After the user agrees to a concrete meetup, require an exact start time with timezone and an effective meeting point: either the selected Event's returned default or a name/address the user supplies. Ask for whichever fact is missing. Do not invent either value and do not call `create_event_instance` until both are available.
+7. If the selected plan has no canonical Event yet, call `create_event` after that explicit choice, then call `create_event_instance` to schedule the concrete occurrence. Carry a user-supplied meeting name/address into the instance override when the new Event result has no resolved default meeting place. Creation joins the actor and makes the occurrence public according to the returned visibility.
+8. If the user only wants to keep a reusable refs-free idea without scheduling it, call `create_event` after explicit confirmation and stop before instance creation.
+9. If intent remains flexible, call `set_interest` only when the user asks Gezgin to remember it. Include known location, activity group, child-friendly/accessibility needs, environment, intensity, and availability; describe it as saved intent, not a public post.
 
 ## Work with scheduled instances
 
