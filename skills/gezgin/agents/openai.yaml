@@ -1,7 +1,7 @@
 interface:
   display_name: "Gezgin"
-  short_description: "Travel research and community workflows"
-  default_prompt: "Use $gezgin to compare destinations and coordinate a Gezgin meetup."
+  short_description: "AI-first travel and city communities"
+  default_prompt: "Use $gezgin to explore places, people, activities, events, and city communities, then coordinate only my chosen action."
 
 dependencies:
   tools:

@@ -10,8 +10,8 @@ instruction package: `SKILL.md` plus any required `agents`, `references`,
 
 ### Gezgin
 
-Research and compare destinations with source-backed Gezgin data, then
-coordinate connected travel and community workflows.
+Explore destinations, places, activities, events, derived city communities,
+and privacy-safe member matches, then coordinate explicit connected actions.
 
 ```bash
 npx -y skills@latest add onurmatik/skills \
