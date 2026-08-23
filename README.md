@@ -4,7 +4,7 @@ Public, installable agent skills for my (@onurmatik) projects.
 
 Each published skill lives under `skills/<name>/` and includes its complete
 instruction package: `SKILL.md` plus any required `agents`, `references`,
-`scripts`, or `assets` directories.
+`scripts`, `assets`, or installation guidance.
 
 ## Available skills
 
@@ -22,6 +22,10 @@ The skill declares the Gezgin Streamable HTTP MCP dependency at
 `https://gezgin.com/mcp`. The native agent client is responsible for creating
 the connection and completing OAuth; the skill never asks users to paste
 credentials or tokens.
+
+The public one-paste setup guide is available at
+[`skills/gezgin/INSTALL.md`](skills/gezgin/INSTALL.md). Projects may redirect a
+stable, branded installation URL to that version-controlled document.
 
 ## Repository layout
 
@@ -55,7 +59,7 @@ anonymously without GitHub credentials.
 - Skill packages must contain every referenced local file.
 - Credentials, access tokens, private URLs, production data, and application
   secrets must never be committed here.
-- Project installation pages should serve their instructions directly and use
-  this public repository as the skill source.
+- Project installation URLs may redirect to instructions in this public
+  repository so the published skill and its setup guide share one source.
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for the release checklist.
