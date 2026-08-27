@@ -31,4 +31,3 @@ For a multi-step request, analyze or open the menu first, wait for a completed r
 ## Connection boundary
 
 If the `menufit` MCP catalog is unavailable, report that the native MenuFit connection is missing and direct the user to the package's `INSTALL.md`. Use only the native MCP connection flow; do not call MenuFit through raw HTTP or request access tokens.
-
