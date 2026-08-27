@@ -27,6 +27,19 @@ The public one-paste setup guide is available at
 [`skills/gezgin/INSTALL.md`](skills/gezgin/INSTALL.md). Projects may redirect a
 stable, branded installation URL to that version-controlled document.
 
+### MenuFit
+
+Analyze, translate, personalize, rank, revisit, and illustrate restaurant menus
+through MenuFit's native MCP connection.
+
+```bash
+npx -y skills@latest add onurmatik/skills --skill menufit --global --copy --yes
+```
+
+The package declares the canonical Streamable HTTP dependency at
+`https://menu.fit/mcp`. Connect and authenticate through the agent client's
+native MCP controls; see [`skills/menufit/INSTALL.md`](skills/menufit/INSTALL.md).
+
 ## Repository layout
 
 ```text
@@ -45,10 +58,11 @@ Run the repository checks from the project root:
 
 ```bash
 python3 scripts/validate_skills.py
-npx -y skills@latest add "$PWD" -g -a codex -s gezgin -y --copy
+npx -y skills@latest add onurmatik/skills --list
 ```
 
-CI repeats the structural validation and performs a clean local installation.
+CI repeats the structural validation and performs a clean local installation
+for every skill.
 After changes reach `main`, CI also verifies that the repository is installable
 anonymously without GitHub credentials.
 

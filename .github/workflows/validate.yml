@@ -17,23 +17,22 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: "22"
-      - name: Validate skill structure
+      - name: Validate every skill structure
         run: python3 scripts/validate_skills.py
-      - name: Test a clean local installation
+      - name: Test clean local installations
         shell: bash
         run: |
-          test_home="$(mktemp -d)"
-          trap 'rm -rf "$test_home"' EXIT
-          HOME="$test_home" npx -y skills@latest add "$PWD" \
-            -g -a codex -s gezgin -y --copy
-          installed="$(find "$test_home" -type f -path '*/skills/gezgin/SKILL.md' -print -quit)"
-          test -n "$installed"
-          skill_root="$(dirname "$installed")"
-          test -f "$skill_root/INSTALL.md"
-          test -f "$skill_root/agents/openai.yaml"
-          test -f "$skill_root/references/destination-research.md"
-          test -f "$skill_root/references/profile-and-community.md"
-          test -f "$skill_root/references/events.md"
+          set -euo pipefail
+          while IFS= read -r skill; do
+            test_home="$(mktemp -d)"
+            HOME="$test_home" npx -y skills@latest add "$PWD" \
+              --skill "$skill" --global --copy --yes
+            installed="$(find "$test_home" -type f -path "*/skills/$skill/SKILL.md" -print -quit)"
+            test -n "$installed"
+            skill_root="$(dirname "$installed")"
+            diff -qr "skills/$skill" "$skill_root"
+            rm -rf "$test_home"
+          done < <(find skills -mindepth 1 -maxdepth 1 -type d -exec basename {} \; | sort)
 
   anonymous-install:
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
@@ -43,21 +42,26 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: "22"
-      - name: Install from public GitHub without credentials
+      - name: Discover and install every skill anonymously
         shell: bash
         env:
           GH_TOKEN: ""
           GITHUB_TOKEN: ""
         run: |
-          test_home="$(mktemp -d)"
-          trap 'rm -rf "$test_home"' EXIT
-          HOME="$test_home" npx -y skills@latest add onurmatik/skills \
-            -g -a codex -s gezgin -y --copy
-          installed="$(find "$test_home" -type f -path '*/skills/gezgin/SKILL.md' -print -quit)"
-          test -n "$installed"
-          skill_root="$(dirname "$installed")"
-          test -f "$skill_root/INSTALL.md"
-          test -f "$skill_root/agents/openai.yaml"
-          test -f "$skill_root/references/destination-research.md"
-          test -f "$skill_root/references/profile-and-community.md"
-          test -f "$skill_root/references/events.md"
+          set -euo pipefail
+          public_copy="$(mktemp -d)"
+          trap 'rm -rf "$public_copy"' EXIT
+          GIT_TERMINAL_PROMPT=0 git -c credential.helper= clone --quiet --depth 1 \
+            https://github.com/onurmatik/skills.git "$public_copy/repo"
+          npx -y skills@latest add onurmatik/skills --list
+          while IFS= read -r skill; do
+            test_home="$(mktemp -d)"
+            HOME="$test_home" GH_TOKEN="" GITHUB_TOKEN="" \
+              npx -y skills@latest add onurmatik/skills \
+              --skill "$skill" --global --copy --yes
+            installed="$(find "$test_home" -type f -path "*/skills/$skill/SKILL.md" -print -quit)"
+            test -n "$installed"
+            skill_root="$(dirname "$installed")"
+            diff -qr "$public_copy/repo/skills/$skill" "$skill_root"
+            rm -rf "$test_home"
+          done < <(find "$public_copy/repo/skills" -mindepth 1 -maxdepth 1 -type d -exec basename {} \; | sort)

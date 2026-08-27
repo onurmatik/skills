@@ -1,0 +1,16 @@
+interface:
+  display_name: "MenuFit"
+  short_description: "Analyze and personalize restaurant menus"
+  default_prompt: "Use $menufit to analyze this menu and recommend suitable dishes."
+
+dependencies:
+  tools:
+    - type: "mcp"
+      value: "menufit"
+      description: "MenuFit production MCP server"
+      transport: "streamable_http"
+      url: "https://menu.fit/mcp"
+
+policy:
+  allow_implicit_invocation: true
+

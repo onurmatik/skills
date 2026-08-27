@@ -11,6 +11,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 SKILLS_DIR = ROOT / "skills"
 LINK_PATTERN = re.compile(r"\[[^\]]+\]\(([^)]+)\)")
+PRIVATE_PATH_PATTERN = re.compile(r"(?:/Users/|file://|github\.com/onurmatik/menu-fit)", re.IGNORECASE)
 
 
 def parse_frontmatter(path: Path) -> dict[str, str]:
@@ -52,6 +53,8 @@ def validate_skill(skill_dir: Path) -> list[str]:
         errors.append(f"{entrypoint}: missing description")
 
     text = entrypoint.read_text(encoding="utf-8")
+    if PRIVATE_PATH_PATTERN.search(text):
+        errors.append(f"{entrypoint}: contains a local or private installation source")
     for target in LINK_PATTERN.findall(text):
         if target.startswith(("http://", "https://", "#")):
             continue
@@ -66,6 +69,12 @@ def validate_skill(skill_dir: Path) -> list[str]:
             errors.append(
                 f"{openai_yaml}: default prompt must mention ${skill_dir.name}"
             )
+
+    install = skill_dir / "INSTALL.md"
+    if not install.is_file():
+        errors.append(f"{skill_dir}: missing INSTALL.md")
+    elif PRIVATE_PATH_PATTERN.search(install.read_text(encoding="utf-8")):
+        errors.append(f"{install}: contains a local or private installation source")
 
     return errors
 
